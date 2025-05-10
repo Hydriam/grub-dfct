@@ -2,9 +2,7 @@ package cmd
 
 import (
 	"os"
-	"os/exec"
 	"fmt"
-	"regexp"
 	"github.com/spf13/cobra"
 	"syscall"
 )
@@ -16,54 +14,6 @@ var rootCmd = &cobra.Command{
 	Long:  "grub-dfct, a Grub Default File Configuration Tool\n" +
 		"This program edits /etc/default/grub and can also reconfigure grub.cfg\n",
 }
-var setTimeout = &cobra.Command{
-    Use:   "settimeout",
-    Short: "This option sets timeout for grub.",
-    Long: "This option sets timeout for grub.\n" +
-          "The 30 is delay in seconds, you can set it to anything else.\n" +
-          "Remember that you need to apply the changes!",
-    
-	Run: func(cmd *cobra.Command, args []string) {
-		const grubDefaultFile = "/etc/default/grub"
-
-		data, err := os.ReadFile(grubDefaultFile)
-		if err != nil { 
-			fmt.Println("Error reading:", err)
-			return
-		}
-		dataButWorks := string(data)
-		//fmt.Println(string(data))
-		fmt.Println(args[0])
-
-		re := regexp.MustCompile(`(?m)^GRUB_TIMEOUT=.*`)
-
-		modifedData := re.ReplaceAllString(dataButWorks, "GRUB_TIMEOUT="+args[0])
-
-		err = os.WriteFile(grubDefaultFile, []byte(modifedData), 0644)
-		if err != nil {
-			fmt.Println("Error writing:", err)
-			return
-		}
-		
-		fmt.Println("\nTimeout updated.")
-    },
-}
-
-var updateGrub = &cobra.Command{
-	Use:   "update",
-    Short: "This option apply's your grub settings.",
-    Long: "This option uses grub-mkconfig to reload your settings.\n",
-	Run: func(cmd *cobra.Command, args []string) {
-		command := exec.Command("grub2-mkconfig", "-o", "/boot/grub2/grub.cfg")
-		
-		output, err := command.CombinedOutput()
-		if err != nil {
-			fmt.Println("Error executing grub2-mkconfig:", err)
-		}
-		fmt.Println(string(output))
-	},
-}
-
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
