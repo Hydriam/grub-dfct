@@ -23,6 +23,15 @@ var updateGrub = &cobra.Command{
     Short: "This option apply's your grub settings.",
     Long: "This option uses grub-mkconfig to reload your settings.\n",
 	Run: func(cmd *cobra.Command, args []string) {
+
+		//Check for sudo permission:
+	euid := syscall.Geteuid()
+
+		if euid != 0 {
+			fmt.Println("This program needs sudo priviliges.")
+			os.Exit(1)
+		}
+
 		command := exec.Command("grub2-mkconfig", "-o", "/boot/grub2/grub.cfg")
 		
 		output, err := command.CombinedOutput()

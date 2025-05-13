@@ -4,9 +4,18 @@ import (
 	"os"
 	"fmt"
 	"regexp"
+	"syscall"
 )
 
 func changeGrubConfig(changeThis string, changeTo string) {
+	//Check for sudo permission:
+	euid := syscall.Geteuid()
+
+	if euid != 0 {
+		fmt.Println("This program needs sudo priviliges.")
+		os.Exit(1)
+	}
+
 	const grubDefaultFile = "/etc/default/grub"
 	data, err := os.ReadFile(grubDefaultFile)
 	if err != nil { 
