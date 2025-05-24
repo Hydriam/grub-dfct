@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"os"
 	"fmt"
+	"os"
 	"regexp"
 	"syscall"
 )
@@ -12,13 +12,13 @@ func changeGrubConfig(changeThis string, changeTo string) {
 	euid := syscall.Geteuid()
 
 	if euid != 0 {
-		fmt.Println("This program needs sudo priviliges.")
+		fmt.Println("This program needs sudo privileges.")
 		os.Exit(1)
 	}
 
 	const grubDefaultFile = "/etc/default/grub"
 	data, err := os.ReadFile(grubDefaultFile)
-	if err != nil { 
+	if err != nil {
 		fmt.Println("Error reading:", err)
 		return
 	}
@@ -29,7 +29,7 @@ func changeGrubConfig(changeThis string, changeTo string) {
 
 	//re := regexp.MustCompile(`(?m)^%s=.*`, changeThis)
 
-	modifedData := re.ReplaceAllString(dataButWorks, changeThis + "=" + changeTo)
+	modifedData := re.ReplaceAllString(dataButWorks, changeThis+"="+changeTo)
 
 	err = os.WriteFile(grubDefaultFile, []byte(modifedData), 0644)
 	if err != nil {
