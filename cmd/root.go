@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"os"
+
 	"github.com/spf13/cobra"
 )
 
@@ -9,9 +10,10 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "grub-dfct",
 	Short: "grub-dfct, a Grub Default File Configuration Tool",
-	Long:  "grub-dfct, a Grub Default File Configuration Tool\n" +
+	Long: "grub-dfct, a Grub Default File Configuration Tool\n" +
 		"This program edits /etc/default/grub and can also reconfigure grub.cfg\n",
 }
+
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
@@ -30,10 +32,7 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	rootCmd.AddCommand(setTimeout)
-	rootCmd.AddCommand(updateGrub)
+	rootCmd.AddCommand(setTimeoutCmd)
+	rootCmd.AddCommand(setDefaultCmd)
+	rootCmd.AddCommand(updateCmd)
 }
-
-

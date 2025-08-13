@@ -9,23 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var setTimeout = &cobra.Command{
-	Use:   "settimeout",
-	Short: "This option sets timeout for grub.",
-	Long: "This option sets timeout for grub.\n" +
-		"The 30 is delay in seconds, you can set it to anything else.\n" +
-		"Remember that you need to apply the changes!",
-
-	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 1 {
-			fmt.Println("Error: You should specify the timeout value.")
-			os.Exit(1)
-		}
-		fmt.Println("Changing grub timeout to " + args[0])
-		changeGrubConfig("GRUB_TIMEOUT", args[0])
-	},
-}
-var updateGrub = &cobra.Command{
+var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "This option applies your GRUB settings.",
 	Long:  "This option uses grub-mkconfig to reload your settings.\n",
